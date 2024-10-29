@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time 3D System Monitoring</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #f3ec78, #af4261, #3a1c71, #ffaf7b);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+            perspective: 1500px; /* Adds more depth to 3D elements */
+        }
+
+        /* Central 3D cube */
+        .cube {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            transform-style: preserve-3d; /* Ensures 3D children are rendered in the correct perspective */
+            animation: rotateCube 10s infinite ease-in-out;
+        }
+
+        .cube div {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Faces of the cube */
+        .cube .front  { transform: rotateY(  0deg) translateZ(75px); }
+        .cube .back   { transform: rotateY(180deg) translateZ(75px); }
+        .cube .right  { transform: rotateY( 90deg) translateZ(75px); }
+        .cube .left   { transform: rotateY(-90deg) translateZ(75px); }
+        .cube .top    { transform: rotateX( 90deg) translateZ(75px); }
+        .cube .bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+        /* Keyframes for rotating the cube */
+        @keyframes rotateCube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            50% { transform: rotateX(360deg) rotateY(180deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* Animated floating circles for aesthetic effect */
+        .floating-circle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: float 10s infinite ease-in-out;
+        }
+
+        /* Position floating circles randomly on the screen */
+        .floating-circle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-duration: 12s;
+        }
+
+        .floating-circle:nth-child(2) {
+            top: 30%;
+            left: 80%;
+            animation-duration: 10s;
+        }
+
+        .floating-circle:nth-child(3) {
+            top: 70%;
+            left: 50%;
+            animation-duration: 14s;
+        }
+
+        /* Keyframes for floating circle animation */
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-150px) scale(1.2); }
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        /* Gradient background animation */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cube">
+        <div class="front">CPU</div>
+        <div class="back">Memory</div>
+        <div class="right">Disk</div>
+        <div class="left">GPU</div>
+        <div class="top">Network</div>
+        <div class="bottom">Temp</div>
+    </div>
+
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+    <div class="floating-circle"></div>
+
+    <script>
+        // Simulating real-time system data (replace with actual data)
+        function updateSystemMetrics() {
+            const cpuUsage = Math.random() * 100; // Mock CPU usage
+            const memoryUsage = Math.random() * 100; // Mock Memory usage
+            const diskUsage = Math.random() * 100; // Mock Disk usage
+
+            // Change the cube's rotation based on CPU usage
+            document.querySelector('.cube').style.animationDuration = (15 - (cpuUsage / 10)) + 's';
+
+            // Change cube face colors based on system metrics
+            document.querySelector('.front').style.backgroundColor = `rgba(${cpuUsage * 2.55}, 0, 0, 0.5)`;
+            document.querySelector('.back').style.backgroundColor = `rgba(0, ${memoryUsage * 2.55}, 0, 0.5)`;
+            document.querySelector('.right').style.backgroundColor = `rgba(0, 0, ${diskUsage * 2.55}, 0.5)`;
+
+            // Update floating circles' animation speed based on CPU usage
+            document.querySelectorAll('.floating-circle').forEach(circle => {
+                circle.style.animationDuration = (12 - (cpuUsage / 10)) + 's';
+            });
+        }
+
+        // Continuously update system metrics every second
+        setInterval(updateSystemMetrics, 1000);
+    </script>
+</body>
+</html>
